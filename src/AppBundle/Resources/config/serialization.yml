@@ -1,0 +1,77 @@
+
+
+#Pour prévenir ce genre de problème, le sérialiseur de Symfony utilise la notion de groupe.
+#L’objectif des groupes est de définir les attributs qui seront sérialisés
+#selon la vue que nous voulons afficher.
+
+#Reprenons le cas de notre prix pour mieux comprendre.
+#Lorsque nous affichons les informations sur un prix, ce qui nous intéresse c’est :
+#son identifiant ;
+#son type ;
+#sa valeur ;
+#et son lieu associé.
+#Jusque-là notre problème reste entier.
+#Mais lorsque nous allons afficher ce fameux lieu,
+#nous devons limiter les informations affichées.
+#Ainsi, nous pouvons décider que le lieu embarqué dans la réponse ne doit contenir que :
+
+# son identifiant ;
+#son nom ;
+#et son adresse.
+#Le champ prices doit être ignoré.
+
+#Tous ces attributs peuvent représenter un groupe : price.
+#À chaque fois que le sérialiseur est utilisé en spécifiant le groupe price
+#alors seul ces attributs seront sérialisés.
+
+#De la même façon, lorsque nous voudrons afficher un lieu,
+#tous les attributs seront affichés en excluant un seul attribut : le champ place de l’objet Price.
+
+
+AppBundle\Entity\Place:
+  attributes:
+    id:
+      groups: ['place', 'price']
+    name:
+      groups: ['place', 'price']
+    address:
+      groups: ['place', 'price']
+    prices:
+      groups: ['place']
+
+
+AppBundle\Entity\Price:
+  attributes:
+    id:
+      groups: ['place', 'price']
+    type:
+      groups: ['place', 'price']
+    value:
+      groups: ['place', 'price']
+    place:
+      groups: ['price']
+
+AppBundle\Entity\User:
+  attributes:
+    id:
+      groups: ['user', 'auth-token']
+    firstname:
+      groups: ['user', 'auth-token']
+    lastname:
+      groups: ['user', 'auth-token']
+    email:
+      groups: ['user', 'auth-token']
+    preferences:
+      groups: ['user']
+
+AppBundle\Entity\AuthToken:
+  attributes:
+    id:
+      groups: ['auth-token']
+    value:
+      groups: ['auth-token']
+    createdAt:
+      groups: ['auth-token']
+    user:
+      groups: ['auth-token']
+
